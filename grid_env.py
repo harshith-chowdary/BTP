@@ -52,9 +52,7 @@ class GridEnvironment(gym.Env):
     def step(self, action):
         self.step_counter += 1
         new_pos = list(self.agent_pos)
-        
-        action = self.hsh[action]
-        
+
         if action == 'up':
             new_pos[0] += 1
         elif action == 'down':
@@ -90,7 +88,7 @@ class GridEnvironment(gym.Env):
             # # Temporal Safety Constraints
             if new_pos in self.risky_zones:
                 if self.step_counter - self.last_risky_step < 3: 
-                    reward = -100
+                    reward = -150
                     
                 self.last_risky_step = self.step_counter
                 self.last_unsaved_risky_step = min(self.last_unsaved_risky_step, self.step_counter)
