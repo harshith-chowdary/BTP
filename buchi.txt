@@ -1,0 +1,270 @@
+never { /* G (! obstacle) && G (risky -> (X ! risky || XX ! risky)) && G (risky -> (X (safe || goal) || XX (safe || goal) || XXX (safe || goal) || XXXX (safe || goal) || XXXXX (safe || goal))) && GF safe && FG goal */
+T3_init:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && risky && !safe) -> goto T0_S15
+	:: (!obstacle && risky && safe) -> goto T1_S34
+	fi;
+T0_S1:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && risky && !safe) -> goto T0_S15
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	:: (!obstacle && risky && safe) -> goto T1_S34
+	fi;
+T1_S2:
+	if
+	:: (!obstacle && !risky) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S27
+	:: (!obstacle && risky) -> goto T1_S34
+	fi;
+T0_S3:
+	if
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S15
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	:: (!obstacle && risky && safe) -> goto T1_S34
+	fi;
+T0_S4:
+	if
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S11
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && risky && safe) -> goto T1_S30
+	fi;
+T0_S5:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S3
+	:: (!obstacle && risky && !safe) -> goto T0_S4
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S18
+	:: (!obstacle && risky && safe) -> goto T1_S19
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	fi;
+T0_S6:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S3
+	:: (!obstacle && risky && !safe) -> goto T0_S8
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && !risky && safe) -> goto T1_S18
+	:: (!obstacle && risky && safe) -> goto T1_S23
+	fi;
+T0_S7:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S5
+	:: (!obstacle && risky && !safe) -> goto T0_S6
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S20
+	:: (!obstacle && risky && safe) -> goto T1_S21
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	fi;
+T0_S8:
+	if
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	fi;
+T0_S9:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S5
+	:: (!obstacle && risky && !safe) -> goto T0_S12
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && !risky && safe) -> goto T1_S20
+	:: (!obstacle && risky && safe) -> goto T1_S31
+	fi;
+T0_S10:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S7
+	:: (!obstacle && risky && !safe) -> goto T0_S9
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S22
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	:: (!obstacle && risky && safe) -> goto T1_S28
+	fi;
+T0_S11:
+	if
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S3
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S5
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S7
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S10
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	fi;
+T0_S12:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S3
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S18
+	fi;
+T0_S13:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S5
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S20
+	fi;
+T0_S14:
+	if
+	:: (!obstacle && !risky && !safe) -> goto T0_S7
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && safe) -> goto T1_S22
+	fi;
+T0_S15:
+	if
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S1
+	:: (!obstacle && !risky && safe) -> goto T1_S2
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S3
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S5
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S7
+	:: (!obstacle && risky && !goal && !safe) -> goto T0_S8
+	:: (!obstacle && !risky && !goal && !safe) -> goto T0_S10
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S11
+	:: (!obstacle && risky && !goal && !safe) -> goto T0_S12
+	:: (!obstacle && risky && !goal && !safe) -> goto T0_S13
+	:: (!obstacle && risky && !goal && !safe) -> goto T0_S14
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && risky && safe) -> goto T1_S30
+	fi;
+accept_S16:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S24
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	fi;
+accept_S17:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	fi;
+T1_S18:
+	if
+	:: (!obstacle && !risky && !goal && safe) || (!obstacle && !risky && goal) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S27
+	:: (!obstacle && risky && !goal && safe) || (!obstacle && risky && goal) -> goto T1_S34
+	fi;
+T1_S19:
+	if
+	:: (!obstacle && !risky && !goal && safe) || (!obstacle && !risky && goal) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S17
+	:: (!obstacle && risky && !goal && safe) || (!obstacle && risky && goal) -> goto T1_S30
+	fi;
+T1_S20:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S18
+	:: (!obstacle && risky) -> goto T1_S19
+	:: (!obstacle && risky && goal) -> goto accept_S27
+	fi;
+T1_S21:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S17
+	:: (!obstacle && !risky) -> goto T1_S18
+	:: (!obstacle && risky) -> goto T1_S23
+	fi;
+T1_S22:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S20
+	:: (!obstacle && risky) -> goto T1_S21
+	:: (!obstacle && risky && goal) -> goto accept_S27
+	fi;
+T1_S23:
+	if
+	:: (!obstacle && !risky && !goal && safe) || (!obstacle && !risky && goal) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	fi;
+T0_S24:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S26
+	fi;
+T0_S25:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S24
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	:: (!obstacle && risky && goal && safe) -> goto accept_S27
+	fi;
+T0_S26:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	fi;
+accept_S27:
+	if
+	:: (!obstacle && !risky && goal && safe) -> goto accept_S16
+	:: (!obstacle && risky && goal && safe) -> goto accept_S17
+	:: (!obstacle && !risky && goal && !safe) -> goto T0_S25
+	:: (!obstacle && risky && goal && !safe) -> goto T0_S26
+	fi;
+T1_S28:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S17
+	:: (!obstacle && !risky) -> goto T1_S20
+	:: (!obstacle && risky) -> goto T1_S31
+	fi;
+T1_S29:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S22
+	:: (!obstacle && risky && goal) -> goto accept_S27
+	:: (!obstacle && risky) -> goto T1_S28
+	fi;
+T1_S30:
+	if
+	:: (!obstacle && !risky && !goal && safe) || (!obstacle && !risky && goal) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S18
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S20
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S22
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S29
+	fi;
+T1_S31:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S18
+	fi;
+T1_S32:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S20
+	fi;
+T1_S33:
+	if
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && !risky) -> goto T1_S22
+	fi;
+T1_S34:
+	if
+	:: (!obstacle && !risky && !goal && safe) || (!obstacle && !risky && goal) -> goto T1_S2
+	:: (!obstacle && !risky && goal) -> goto accept_S16
+	:: (!obstacle && risky && goal) -> goto accept_S17
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S18
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S20
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S22
+	:: (!obstacle && risky && !goal && !safe) -> goto T1_S23
+	:: (!obstacle && !risky && !goal && !safe) -> goto T1_S29
+	:: (!obstacle && risky && !goal && safe) || (!obstacle && risky && goal) -> goto T1_S30
+	:: (!obstacle && risky && !goal && !safe) -> goto T1_S31
+	:: (!obstacle && risky && !goal && !safe) -> goto T1_S32
+	:: (!obstacle && risky && !goal && !safe) -> goto T1_S33
+	fi;
+}
