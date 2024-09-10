@@ -15,7 +15,8 @@ fi
 ltl="G (! obstacle) && G (risky -> (X ! risky || XX ! risky)) && G (risky -> (X (safe || goal) || XX (safe || goal) || XXX (safe || goal) || XXXX (safe || goal) || XXXXX (safe || goal))) && GF safe && FG goal"
 
 # Run the executable with the desired command
-"$EXECUTABLE_PATH" -H -f "$ltl" > buchi.txt
+"$EXECUTABLE_PATH" -H -f "$ltl" > bucchi_hoa.txt
+"$EXECUTABLE_PATH" -f "$ltl" > bucchi_formal.txt
 
 # usage: ltl3ba [-flag] -f formula
 #                    or -F file
