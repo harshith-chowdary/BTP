@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import gym
 from gym import spaces
+import random
+
+goal_reward = 1000
 
 class GridEnvironment(gym.Env):
     def __init__(
@@ -19,8 +22,8 @@ class GridEnvironment(gym.Env):
         self.safe_zones = safe_zones  # list of safe zone coordinates
         self.agent_pos = (0, 0)  # start at bottom-left corner (flipped)
         self.goal_pos = (grid_size[0] - 1, grid_size[1] - 1)  # goal at top-right corner
-        self.risky_counter = 0  # track consecutive steps in risky zones
-        self.safe_visit_counter = 0  # track steps since last visit to safe zone
+        self.last_risky_step = 0
+        self.last_unsaved_risky_step = float('inf')
         self.step_counter = 0  # total steps taken
         
         self.action_space = spaces.Discrete(4)  # 0: up, 1: down, 2: left, 3: right
@@ -28,8 +31,14 @@ class GridEnvironment(gym.Env):
         
         self.hsh = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
 
-    def reset(self):
-        self.agent_pos = (0, 0)
+    def reset(self, origin = 0):
+        if origin:
+            self.agent_pos = (0, 0)
+        else:
+            self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
+            
+        while self.agent_pos in self.obstacles or self.agent_pos == self.goal_pos:
+            self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
         self.risky_counter = 0
         self.safe_visit_counter = 0
         self.step_counter = 0
@@ -43,6 +52,9 @@ class GridEnvironment(gym.Env):
     def step(self, action):
         self.step_counter += 1
         new_pos = list(self.agent_pos)
+        
+        action = self.hsh[action]
+        
         if action == 'up':
             new_pos[0] += 1
         elif action == 'down':
@@ -53,30 +65,49 @@ class GridEnvironment(gym.Env):
             new_pos[1] += 1
 
         new_pos = tuple(new_pos)
+        
+        # if self.is_valid_move(new_pos):
+        #     self.agent_pos = new_pos
+        #     reward = -1  # Default penalty for moving
+        #     done = False
+
+        #     # Assign penalties and rewards
+        #     if new_pos in self.risky_zones:
+        #         reward = -30  # Penalty for risky zones
+        #     elif new_pos in self.safe_zones:
+        #         reward = 50  # Reward for visiting safe zones
+        #     elif new_pos == self.goal_pos:
+        #         done = True
+        #         reward = 10000  # Large reward for reaching the goal
+
+        #     return new_pos, reward, done, {}
+        
         if self.is_valid_move(new_pos):
             self.agent_pos = new_pos
-            reward = 0
+            reward = -1
             done = False
 
-            # Temporal Safety Constraints
+            # # Temporal Safety Constraints
             if new_pos in self.risky_zones:
-                self.risky_counter += 1
-                if self.risky_counter > 3:  # If more than 3 consecutive steps in risky zones, penalty
-                    reward = -5
-            else:
-                self.risky_counter = 0  # Reset if agent leaves risky zone
+                if self.step_counter - self.last_risky_step < 3: 
+                    reward = -100
+                    
+                self.last_risky_step = self.step_counter
+                self.last_unsaved_risky_step = min(self.last_unsaved_risky_step, self.step_counter)
 
-            self.safe_visit_counter += 1
-            if self.safe_visit_counter > 5 and new_pos not in self.safe_zones:  # If safe zone not visited in 5 steps
-                reward = -3  # Penalty for not visiting safe zone in time
-
+            if new_pos not in self.safe_zones and self.step_counter - self.last_unsaved_risky_step > 5:
+                reward = -100
+                
             if new_pos in self.safe_zones:
-                self.safe_visit_counter = 0  # Reset if agent visits a safe zone
+                self.last_unsaved_risky_step = float('inf')
 
-            done = new_pos == self.goal_pos  # Reached goal
+            if new_pos == self.goal_pos:  # Reached goal
+                done = True
+                reward = goal_reward
+                
             return new_pos, reward, done, {}
         else:
-            return self.agent_pos, -10, False, {}  # collision penalty
+            return self.agent_pos, -100, False, {}  # collision penalty
 
     def render(self):
         grid = np.zeros(self.grid_size)
