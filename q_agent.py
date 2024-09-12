@@ -203,7 +203,7 @@ if __name__ == "__main__":
         state, reward, done, _ = env.step(action)
         
         total_cost += reward
-        print(f"Action: {action}, State: {state}, Reward: {reward}, Done: {done}")
+        print(f"Action: {str(env.hsh[action]):<10} State: {str(state):<10} Reward: {str(reward):<10} Done: {str(done):<10}")
         
         env.render()
         

@@ -1,7 +1,7 @@
 # !/bin/bash
 
 # Define the path to the executable
-EXECUTABLE_PATH="/home/harshith/ltl3ba-1.1.3/ltl3ba"
+EXECUTABLE_PATH="./ltl3ba-1.1.3/ltl3ba"
 
 # Check if the executable exists
 if [ ! -f "$EXECUTABLE_PATH" ]; then
