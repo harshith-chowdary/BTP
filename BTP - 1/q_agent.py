@@ -11,13 +11,13 @@ class GridEnvironment(gym.Env):
     def __init__(
         self, 
         grid_size = (10, 10), 
-        obstacles = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)],  # Block some optimal paths
+        bombs = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)],  # Block some optimal paths
         risky_zones = [(1, 4), (3, 3), (3, 9), (4, 0), (4, 5), (6, 4), (7, 5), (8, 4), (9, 2)],  # Risky zones placed near potential paths
         safe_zones = [(1, 1), (1, 6), (5, 5), (5, 7), (7, 1), (7, 8), (8, 5)]  # Safe zones in strategic positions to incentivize exploration
     ):
         super(GridEnvironment, self).__init__()
         self.grid_size = grid_size
-        self.obstacles = obstacles  # list of obstacle coordinates
+        self.bombs = bombs  # list of bomb coordinates
         self.risky_zones = risky_zones  # list of risky zone coordinates
         self.safe_zones = safe_zones  # list of safe zone coordinates
         self.agent_pos = (0, 0)  # start at bottom-left corner (flipped)
@@ -37,7 +37,7 @@ class GridEnvironment(gym.Env):
         else:
             self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
             
-        while self.agent_pos in self.obstacles or self.agent_pos == self.goal_pos:
+        while self.agent_pos in self.bombs or self.agent_pos == self.goal_pos:
             self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
         self.risky_counter = 0
         self.safe_visit_counter = 0
@@ -45,7 +45,7 @@ class GridEnvironment(gym.Env):
         return self.agent_pos
 
     def is_valid_move(self, new_pos):
-        if new_pos in self.obstacles or not (0 <= new_pos[0] < self.grid_size[0] and 0 <= new_pos[1] < self.grid_size[1]):
+        if new_pos in self.bombs or not (0 <= new_pos[0] < self.grid_size[0] and 0 <= new_pos[1] < self.grid_size[1]):
             return False
         return True
 
@@ -111,8 +111,8 @@ class GridEnvironment(gym.Env):
 
     def render(self):
         grid = np.zeros(self.grid_size)
-        for obstacle in self.obstacles:
-            grid[obstacle] = -1  # obstacles
+        for bomb in self.bombs:
+            grid[bomb] = -1  # bombs
         for risky in self.risky_zones:
             grid[risky] = -0.5  # risky zones
         for safe in self.safe_zones:
@@ -134,7 +134,7 @@ class GridEnvironment(gym.Env):
         
         # Set the colorbar labels (tick labels)
         cbar.set_ticks([-1, -0.5, 0, 0.5, 1, 1.5])
-        cbar.set_ticklabels(['Obstacles', 'Risky Zones', 'Nuetral', 'Agent', 'Safe Zones', 'Goal'])
+        cbar.set_ticklabels(['bombs', 'Risky Zones', 'Nuetral', 'Agent', 'Safe Zones', 'Goal'])
         
         plt.show()
 
@@ -162,15 +162,15 @@ class QLearningAgent:
         self.q_table[state[0], state[1], action] += self.alpha * td_error
 
 if __name__ == "__main__":
-    # Define the grid with obstacles, risky zones, and safe zones
-    obstacles = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)]
+    # Define the grid with bombs, risky zones, and safe zones
+    bombs = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)]
     risky_zones = [(1, 4), (3, 3), (3, 9), (4, 0), (4, 5), (6, 4), (7, 5), (8, 4), (9, 2)]
     safe_zones = [(1, 1), (1, 6), (5, 5), (5, 7), (7, 1), (7, 8), (8, 5)]
 
     grid_size = (10, 10)
 
     # Create environment and agent
-    env = GridEnvironment(grid_size=grid_size, obstacles=obstacles, risky_zones=risky_zones, safe_zones=safe_zones)
+    env = GridEnvironment(grid_size=grid_size, bombs=bombs, risky_zones=risky_zones, safe_zones=safe_zones)
     agent = QLearningAgent(env.action_space, grid_size)
 
     episodes = 100000

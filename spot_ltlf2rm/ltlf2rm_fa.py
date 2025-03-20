@@ -93,7 +93,7 @@ output_file_json = './out/rm.json' # output file in txt format
 # STEP 1: Input LTL formulas and rewards
 
 ltl_list = [
-    'G (! obstacle)', 
+    'G (! bomb)', 
     'G (risky -> (X ! risky || XX ! risky))',
     'G (risky -> (X (safe || goal) || XX (safe || goal) || XXX (safe || goal) || XXXX (safe || goal) || XXXXX (safe || goal)))',
     'GF safe',

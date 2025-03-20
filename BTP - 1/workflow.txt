@@ -1,0 +1,7 @@
+1. Specifications reduction
+2. Derive LTL from the specifications
+3. Convert LTL into Bucchi Automata
+4. Bucchi Automata Optimization
+5. Construct reward machine from LTL / Buchhi Automata (from step  2  / 3 / 4)
+6. Train rm (reward machine) on RL Algos like Q or DQN
+7. Testing on different environments and reward shaping

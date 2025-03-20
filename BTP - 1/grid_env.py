@@ -11,13 +11,13 @@ class GridEnvironment(gym.Env):
     def __init__(
         self, 
         grid_size = (10, 10), 
-        obstacles = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)],  # Block some optimal paths
+        bombs = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)],  # Block some optimal paths
         risky_zones = [(1, 4), (3, 3), (3, 9), (4, 0), (4, 5), (6, 4), (7, 5), (8, 4), (9, 2)],  # Risky zones placed near potential paths
         safe_zones = [(1, 1), (1, 6), (5, 5), (5, 7), (7, 1), (7, 8), (8, 5)]  # Safe zones in strategic positions to incentivize exploration
     ):
         super(GridEnvironment, self).__init__()
         self.grid_size = grid_size
-        self.obstacles = obstacles  # list of obstacle coordinates
+        self.bombs = bombs  # list of bomb coordinates
         self.risky_zones = risky_zones  # list of risky zone coordinates
         self.safe_zones = safe_zones  # list of safe zone coordinates
         self.agent_pos = (0, 0)  # start at bottom-left corner (flipped)
@@ -37,7 +37,7 @@ class GridEnvironment(gym.Env):
         else:
             self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
             
-        while self.agent_pos in self.obstacles or self.agent_pos == self.goal_pos:
+        while self.agent_pos in self.bombs or self.agent_pos == self.goal_pos:
             self.agent_pos = (random.randint(0, 9), random.randint(0, 9))
         self.risky_counter = 0
         self.safe_visit_counter = 0
@@ -45,7 +45,7 @@ class GridEnvironment(gym.Env):
         return self.agent_pos
 
     def is_valid_move(self, new_pos):
-        if new_pos in self.obstacles or not (0 <= new_pos[0] < self.grid_size[0] and 0 <= new_pos[1] < self.grid_size[1]):
+        if new_pos in self.bombs or not (0 <= new_pos[0] < self.grid_size[0] and 0 <= new_pos[1] < self.grid_size[1]):
             return False
         return True
 
@@ -109,8 +109,8 @@ class GridEnvironment(gym.Env):
 
     def render(self):
         grid = np.zeros(self.grid_size)
-        for obstacle in self.obstacles:
-            grid[obstacle] = -1  # obstacles
+        for bomb in self.bombs:
+            grid[bomb] = -1  # bombs
         for risky in self.risky_zones:
             grid[risky] = -0.5  # risky zones
         for safe in self.safe_zones:
@@ -132,12 +132,12 @@ class GridEnvironment(gym.Env):
         
         # Set the colorbar labels (tick labels)
         cbar.set_ticks([-1, -0.5, 0, 0.5, 1, 1.5])
-        cbar.set_ticklabels(['Obstacles', 'Risky Zones', 'Nuetral', 'Agent', 'Safe Zones', 'Goal'])
+        cbar.set_ticklabels(['bombs', 'Risky Zones', 'Nuetral', 'Agent', 'Safe Zones', 'Goal'])
         
         plt.show()
 
-# Strategically place obstacles, risky zones, and safe zones
-obstacles = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)]  # Block some optimal paths
+# Strategically place bombs, risky zones, and safe zones
+bombs = [(1, 2), (2, 3), (2, 8), (4, 4), (4, 6), (3, 7), (4, 2), (5, 1), (7, 7), (6, 2), (8, 3)]  # Block some optimal paths
 risky_zones = [(1, 4), (3, 3), (3, 9), (4, 0), (4, 5), (6, 4), (7, 5), (8, 4), (9, 2)]  # Risky zones placed near potential paths
 safe_zones = [(1, 1), (1, 6), (5, 5), (5, 7), (7, 1), (7, 8), (8, 5)]  # Safe zones in strategic positions to incentivize exploration
 
@@ -145,7 +145,7 @@ grid_size = (10, 10)
 
 # Usage Example
 if __name__ == "__main__":
-    env = GridEnvironment(grid_size=grid_size, obstacles=obstacles, risky_zones=risky_zones, safe_zones=safe_zones)
+    env = GridEnvironment(grid_size=grid_size, bombs=bombs, risky_zones=risky_zones, safe_zones=safe_zones)
 
     state = env.reset()
     print("Initial State:", state)
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 exit()
 
 # Create environment
-env = GridEnvironment(grid_size=grid_size, obstacles=obstacles, risky_zones=risky_zones, safe_zones=safe_zones)
+env = GridEnvironment(grid_size=grid_size, bombs=bombs, risky_zones=risky_zones, safe_zones=safe_zones)
 env.render()
 
 # Simulate steps (Example)
@@ -175,10 +175,10 @@ exit(0)
 
 # safety policy
 '''
-    ltl = G (¬obstacle) ∧ G (risky_zone -> (X ¬risky_zone ∨ XX ¬risky_zone)) ∧ G (¬risky_zone U (risky_zone ∧ F[5] (safe_zone ∨ goal_zone))) ∧ FG goal_zone
+    ltl = G (¬bomb) ∧ G (risky_zone -> (X ¬risky_zone ∨ XX ¬risky_zone)) ∧ G (¬risky_zone U (risky_zone ∧ F[5] (safe_zone ∨ goal_zone))) ∧ FG goal_zone
     
     Explanation of the Combined LTL Formula:
-    G (¬obstacle): The agent must always avoid obstacles.
+    G (¬bomb): The agent must always avoid bombs.
     G (risky_zone -> (X ¬risky_zone ∨ XX ¬risky_zone)): If the agent enters a risky zone, it must leave it within 2 moves.
     G (¬risky_zone U (risky_zone ∧ F[5] (safe_zone ∨ goal_zone))): After leaving a risky zone, the agent must visit a safe zone or the goal within 5 moves.
     FG goal_zone: The agent must eventually reach the goal.

@@ -1,0 +1,14 @@
+ltl="
+G (NOT bomb) &&
+G (NOT(bomb && risky) && NOT(bomb && safe) && NOT(bomb && normal) && NOT(bomb && goal) &&
+   NOT(risky && safe) && NOT(risky && normal) && NOT(risky && goal) &&
+   NOT(safe && normal) && NOT(normal && goal)) &&
+G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe)) &&
+G (NOT(risky && X risky && X X risky)) &&
+G ((normal || risky || safe) -> (X (normal || risky || safe || goal))) && 
+G (bomb || risky || safe || normal || goal) &&
+F (goal)
+"
+
+
+G (NOT bomb) && G (bomb || risky || safe || normal || goal) && G (NOT(bomb && risky) && NOT(bomb && safe) && NOT(bomb && normal) && NOT(bomb && goal) && NOT(risky && safe) && NOT(risky && normal) && NOT(risky && goal) && NOT(safe && normal) && NOT(normal && goal)) && G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe)) && G (NOT(risky && X risky && X X risky)) && G ((normal || risky || safe) -> (X (normal || risky || safe || goal))) && G (bomb || risky || safe || normal || goal) && F (goal)

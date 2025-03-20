@@ -1,0 +1,33 @@
+HOA: v1
+tool: "ltl3ba" "1.1.3"
+name: "BA for G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe))"
+States: 6
+Start: 0
+acc-name: Buchi
+Acceptance: 1 Inf(0)
+AP: 2 "risky" "safe"
+properties: trans-labels explicit-labels state-acc no-univ-branch
+--BODY--
+State: 0 "accept_init" {0}
+ [(!0)] 0
+ [(0)] 5
+State: 1 "accept_S1" {0}
+ [(!0 & 1)] 0
+ [(0 & 1)] 5
+State: 2 "accept_S2" {0}
+ [(!0 & 1)] 0
+ [(!1)] 1
+ [(0 & 1)] 5
+State: 3 "accept_S3" {0}
+ [(!0 & 1)] 0
+ [(!1)] 2
+ [(0 & 1)] 5
+State: 4 "accept_S4" {0}
+ [(!0 & 1)] 0
+ [(!1)] 3
+ [(0 & 1)] 5
+State: 5 "accept_S5" {0}
+ [(!0 & 1)] 0
+ [(!1)] 4
+ [(0 & 1)] 5
+--END--

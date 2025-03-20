@@ -1,0 +1,36 @@
+never { /* G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe)) */
+accept_init:
+	if
+	:: (!risky) -> goto accept_init
+	:: (risky) -> goto accept_S5
+	fi;
+accept_S1:
+	if
+	:: (!risky && safe) -> goto accept_init
+	:: (risky && safe) -> goto accept_S5
+	fi;
+accept_S2:
+	if
+	:: (!risky && safe) -> goto accept_init
+	:: (!safe) -> goto accept_S1
+	:: (risky && safe) -> goto accept_S5
+	fi;
+accept_S3:
+	if
+	:: (!risky && safe) -> goto accept_init
+	:: (!safe) -> goto accept_S2
+	:: (risky && safe) -> goto accept_S5
+	fi;
+accept_S4:
+	if
+	:: (!risky && safe) -> goto accept_init
+	:: (!safe) -> goto accept_S3
+	:: (risky && safe) -> goto accept_S5
+	fi;
+accept_S5:
+	if
+	:: (!risky && safe) -> goto accept_init
+	:: (!safe) -> goto accept_S4
+	:: (risky && safe) -> goto accept_S5
+	fi;
+}

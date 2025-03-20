@@ -12,7 +12,34 @@ fi
 # Optionally set LD_LIBRARY_PATH if the library is not in standard locations
 # export LD_LIBRARY_PATH="/path/to/libraries:$LD_LIBRARY_PATH"
 
-ltl="G (! obstacle) && G (risky -> (X ! risky || XX ! risky)) && G (risky -> (X (safe || goal) || XX (safe || goal) || XXX (safe || goal) || XXXX (safe || goal) || XXXXX (safe || goal))) && GF safe && FG goal"
+# ltl="G (! bomb) && G (risky -> (X ! risky || XX ! risky)) && G (risky -> (X (safe || goal) || XX (safe || goal) || XXX (safe || goal) || XXXX (safe || goal) || XXXXX (safe || goal))) && GF safe && FG goal"
+
+# ltl="
+# G (!bomb) &&
+# G (!(risky && X risky && X X risky)) &&
+# G (risky -> (X safe || X X safe || X X X safe || X X X X safe || X X X X X safe)) &&
+# G (bomb || risky || safe || normal || goal) &&
+# G (!(bomb && risky) && !(bomb && safe) && !(bomb && normal) && !(bomb && goal) &&
+#    !(risky && safe) && !(risky && normal) && !(risky && goal) &&
+#    !(safe && normal) && !(safe && goal) &&
+#    !(normal && goal)) &&
+# F (goal)
+# "
+
+# ltl="
+# G (!bomb) &&
+# G (bomb || risky || safe || normal || goal) &&
+# G (!(bomb && risky) && !(bomb && safe) && !(bomb && normal) && !(bomb && goal) &&
+#    !(risky && safe) && !(risky && normal) && !(risky && goal) &&
+#    !(safe && normal) && !(normal && goal)) &&
+# G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe)) &&
+# G (!(risky && X risky && X X risky)) &&
+# G ((normal || risky || safe) -> (X (normal || risky || safe || goal))) && 
+# G (bomb || risky || safe || normal || goal) &&
+# F (goal)
+# "
+
+ltl="G (risky -> (X X X X X safe || X X X X safe || X X X safe || X X safe || X safe))"
 
 # Run the executable with the desired command
 "$EXECUTABLE_PATH" -H -f "$ltl" > bucchi_hoa.txt
