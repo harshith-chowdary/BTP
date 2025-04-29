@@ -1,0 +1,18 @@
+0 # initial state
+[] # terminal state
+(0,0,'(!risky)',ConstantRewardFunction(0))
+(0,5,'(risky)',ConstantRewardFunction(0))
+(1,0,'(!risky&safe)',ConstantRewardFunction(0))
+(1,5,'(risky&safe)',ConstantRewardFunction(0))
+(2,0,'(!risky&safe)',ConstantRewardFunction(0))
+(2,1,'(!safe)',ConstantRewardFunction(0))
+(2,5,'(risky&safe)',ConstantRewardFunction(0))
+(3,0,'(!risky&safe)',ConstantRewardFunction(0))
+(3,2,'(!safe)',ConstantRewardFunction(0))
+(3,5,'(risky&safe)',ConstantRewardFunction(0))
+(4,0,'(!risky&safe)',ConstantRewardFunction(0))
+(4,3,'(!safe)',ConstantRewardFunction(0))
+(4,5,'(risky&safe)',ConstantRewardFunction(0))
+(5,0,'(!risky&safe)',ConstantRewardFunction(0))
+(5,4,'(!safe)',ConstantRewardFunction(0))
+(5,5,'(risky&safe)',ConstantRewardFunction(0))

@@ -92,6 +92,10 @@ output_file_json = './out/rm.json' # output file in txt format
 
 # STEP 1: Input LTL formulas and rewards
 
+with open('input_ltl.txt', 'r') as file:
+    ltl_list = [line.strip() for line in file.readlines() if line.strip()]
+reward_list = [1] * len(ltl_list)  # Assign a default reward of 1 for each LTL formula
+
 ltl_list = [
     'G (! bomb)', 
     'G (risky -> (X ! risky || XX ! risky))',
@@ -102,8 +106,8 @@ ltl_list = [
 
 reward_list = [1, 1, 1, 1, 1]
 
-ltl_list = ['((false V (((! ((o)) && (! ((r)) || (X (! ((r))) || X (X (! ((r))))))) && (! ((r)) || (X (X (X (X (X (((g) || (s))))))) || (X (X (X (X (((g) || (s)))))) || (X (X (X (((g) || (s))))) || (X (X (((g) || (s)))) || X (((g) || (s))))))))) && (true U (s)))) && (true U (false V (g))))']
-reward_list = [1]
+# ltl_list = ['((false V (((! ((o)) && (! ((r)) || (X (! ((r))) || X (X (! ((r))))))) && (! ((r)) || (X (X (X (X (X (((g) || (s))))))) || (X (X (X (X (((g) || (s)))))) || (X (X (X (((g) || (s))))) || (X (X (((g) || (s)))) || X (((g) || (s))))))))) && (true U (s)))) && (true U (false V (g))))']
+# reward_list = [1]
 
 # ltl_list = ['F (a & F (b & F c))'] # input all your LTL formulas in the list
 # reward_list = [1]  # input the reward value for each LTL formula
